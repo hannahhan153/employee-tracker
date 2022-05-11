@@ -9,16 +9,16 @@ VALUES
 
 
 
--- INSERT INTO roles
---     (title, salary, department_id)
--- VALUES
---     ('Salesperson', 50000, 1), 
---     ('Human Resources Generalist', 85000, 2),
---     ('Human Resources Analyst', 70000, 2),
---     ('Senior Accountant', 95000, 3),
---     ('Financial Analyst', 75000, 3),
---     ('Administrative Assistant', 85000, 4),
---     ('Executive Assistant', 76000, 4);
+INSERT INTO roles
+    (title, salary, department_id, email)
+VALUES
+    ('Salesperson', 50000, 1, 'jf@goldenbough.edu'), 
+    ('Human Resources Generalist', 85000, 2, 'jlondon@ualaska.edu'),
+    ('Human Resources Analyst', 70000, 2, 'djarman@prospectcottage.net'),
+    ('Senior Accountant', 95000, 3, 'ppasolini@salo.com'),
+    ('Financial Analyst', 75000, 3, 'hwilliams@bafta.com'),
+    ('Administrative Assistant', 85000, 4, 'spowell@oscars.com'),
+    ('Executive Assistant', 76000, 4, 'scoalpits@greenaway.com');
 
 INSERT INTO employees
     (first_name, last_name, department_id, industry_connected)
