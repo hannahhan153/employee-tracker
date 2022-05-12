@@ -1,27 +1,26 @@
 -- USE employee;
 
-INSERT INTO department (name, description)
+INSERT INTO department (name)
 VALUES 
-('Sales', 'Sales work directly with prospects and convert them into paying customers. Sales reps can work in the office, virtually, in the field, or in any combination of the three.'),
-('Human Resources', 'HR typically includes onboarding new employees and implementing training programs. Other facets of this human resources job include aiding employees in filling out applicable paperwork and getting fresh hires set up on payroll and benefits.'),
-('Accounting', 'Accounting is responsible for a large number of administrative functions within an organization'),
-('Administration', 'Administration provides valuable services, enabling work processes to operate seamlessly and decision-makers to focus on value-added tasks and responsibilities. Administrative roles include day-to-day tasks that keep an organization running smoothly and efficiently.');
-
+('Sales'),
+('Human Resources'),
+('Accounting'),
+('Administration');
 
 
 INSERT INTO roles
-    (title, salary, department_id, email)
+    (title, salary, department_id)
 VALUES
-    ('Salesperson', 50000, 1, 'jf@goldenbough.edu'), 
-    ('Human Resources Generalist', 85000, 2, 'jlondon@ualaska.edu'),
-    ('Human Resources Analyst', 70000, 2, 'djarman@prospectcottage.net'),
-    ('Senior Accountant', 95000, 3, 'ppasolini@salo.com'),
-    ('Financial Analyst', 75000, 3, 'hwilliams@bafta.com'),
-    ('Administrative Assistant', 85000, 4, 'spowell@oscars.com'),
-    ('Executive Assistant', 76000, 4, 'scoalpits@greenaway.com');
+    ('Salesperson', 50000, 1), 
+    ('Human Resources Generalist', 85000, 2),
+    ('Human Resources Analyst', 70000, 2),
+    ('Senior Accountant', 95000, 3),
+    ('Financial Analyst', 75000, 3),
+    ('Administrative Assistant', 85000, 4),
+    ('Executive Assistant', 76000, 4);
 
 INSERT INTO employees
-    (first_name, last_name, department_id, industry_connected)
+    (first_name, last_name, role_id, manager_id)
 VALUES
     ('Millie', 'Torres', 1, 1), 
     ('Justin', 'Garcia', 1, 1),
