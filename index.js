@@ -158,7 +158,32 @@ const addRole = () => {
 };
 
 const viewAllDepartments = () => {
-    
+    db.query(`SELECT department.id, department.name AS department FROM department`, (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('View all Departments');
+        console.table(res);
+    })
 }
 
+const addDepartment = () => {
+    inquirer.prompt([{
+        name: 'department',
+        message: 'What is the name of the department?',
+        type: 'input',
+    }
+]).then((res) => {
+    const sql = `INSERT INTO department (name)
+    VALUES (?)`
+    db.query(sql, res.department,
+        (err, res) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log('Added new Department')
+            console.table(res);
+        });
+})
+}
 start()
