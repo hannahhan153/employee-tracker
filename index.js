@@ -4,13 +4,13 @@ const db = require('./db/connection');
 
 function start() {
     inquirer.prompt([{
-        name: 'employee',
+        name: 'start',
         message: 'What would you like to do?',
         type: 'list',
         choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department']
-    }]).then((res)=> {
+    }]).then((res) => {
         console.log(res)
-        switch (res.employee) {
+        switch (res.start) {
             case 'View All Employees':
                 viewAllEmployees();
                 break;
@@ -20,16 +20,20 @@ function start() {
             case 'Update Employee Role':
                 updateEmployeeRole();
                 break;
-        case 'View All Roles':
-        break;
-        case 'Add Role':
-        break;
-        case 'View All Departments':
-        break;
-        case 'Add Department':
-        break;
-        case 'Quit':
-        exit();
+            case 'View All Roles':
+                viewAllRoles();
+                break;
+            case 'Add Role':
+                addRole();
+                break;
+            case 'View All Departments':
+                viewAllDepartments();
+                break;
+            case 'Add Department':
+                addDepartment();
+                break;
+            case 'Quit':
+                exit();
         }
     })
 };
@@ -47,57 +51,52 @@ const viewAllEmployees = () => {
         }
         console.log('View All Employees');
         console.table(res);
-        start();
     })
 };
 
 const addEmployee = () => {
-    inquirer.prompt([
-        {
-        name: 'first',
-        message: 'What is the first name of the employee?',
-        type: 'input',
+    inquirer.prompt([{
+            name: 'first',
+            message: 'What is the first name of the employee?',
+            type: 'input',
         },
         {
-        name: 'last',
-        message: 'What is the last name of the employee?',
-        type: 'input',
+            name: 'last',
+            message: 'What is the last name of the employee?',
+            type: 'input',
         },
         {
-        name: 'role',
-        message: 'What is the role ID of the employee?',
-        type: 'input',
+            name: 'role',
+            message: 'What is the role ID of the employee?',
+            type: 'number',
         },
         {
-        name: 'manager',
-        message: 'What is the manager ID of the employee?',
-        type: 'input',
+            name: 'manager',
+            message: 'What is the manager ID of the employee?',
+            type: 'number',
         }
     ]).then((res) => {
         const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
         VALUES (?,?,?,?)`
         db.query(sql, [res.first, res.last, res.role, res.manager],
-        (err, res) => {
-            if (err) {
-                console.log(err);
-            }
-            console.log('Added Bob Jones as an Employee')
-            console.table(res);
-            start();
-        });
-    }
-    )};
+            (err, res) => {
+                if (err) {
+                    console.log(err);
+                }
+                console.log('Added new Employee');
+            });
+    })
+};
 
 const updateEmployeeRole = () => {
-    inquirer.prompt([
-        {
-            name: 'employee',
+    inquirer.prompt([{
+            name: 'updateEmployee',
             message: "Which employee's role would you like to update?",
             type: 'list',
             choices: ['Millie Torres', 'Justin Garcia', 'Emmanuel Allen', 'Preston Jones', 'Henry Lee', 'Brody Moore', 'Gianna Monroe']
         },
         {
-            name: 'role',
+            name: 'updateRole',
             message: "Which role do you want to assign the selected employee?",
             type: 'list',
             choices: ['Salesperson', 'Human Resources Generalist', 'Human Resources Analyst', 'Senior Accountant', 'Financial Analyst', 'Administrative Assistant', 'Executive Assistant']
@@ -106,17 +105,60 @@ const updateEmployeeRole = () => {
         db.query(`SELECT id FROM roles WHERE title = ?`, res.role, (err, res) => {
             if (err) {
                 console.log(err);
-        }
-        db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [result[0].id, res.employee], (err, res) => {
-            if (err) {
-                console.log(err);
-        }
-        console.log("Updated Employee's Role");
-            console.table(res);
-            start();
-    })
+            }
+            db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [res[0].id, res.employee], (err, res) => {
+                if (err) {
+                    console.log(err);
+                }
+                console.log("Updated Employee's Role");
+            })
+        })
     })
 }
-    )}
+
+const viewAllRoles = () => {
+    db.query(`SELECT roles.id, roles.title AS title, roles.salary AS salary, department.name AS department FROM roles 
+    LEFT JOIN department on roles.department_id = department.id`, (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('View all Roles');
+        console.table(res);
+    })
+}
+
+const addRole = () => {
+    inquirer.prompt([{
+        name: 'nameRole',
+        message: 'What is the name of the role?',
+        type: 'input',
+    },
+    {
+        name: 'salaryRole',
+        message: 'What is the salary of the role?',
+        type: 'input',
+    },
+    {
+        name: 'departmentRole',
+        message: 'What is the department id of the role?',
+        type: 'number',
+    }
+]).then((res) => {
+    const sql = `INSERT INTO roles (title, salary, department_id)
+    VALUES (?,?,?)`
+    db.query(sql, [res.nameRole, res.salaryRole, res.departmentRole],
+        (err, res) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log('Added new Role')
+            console.table(res);
+        });
+})
+};
+
+const viewAllDepartments = () => {
+    
+}
 
 start()
