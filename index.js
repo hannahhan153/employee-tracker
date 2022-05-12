@@ -2,6 +2,10 @@ const inquirer = require("inquirer");
 const consoleTable = require('console.table');
 const db = require('./db/connection');
 
+function restart() {
+    start();
+}
+
 function start() {
     inquirer.prompt([{
         name: 'start',
@@ -51,6 +55,7 @@ const viewAllEmployees = () => {
         }
         console.log('View All Employees');
         console.table(res);
+        start();
     })
 };
 
@@ -84,33 +89,57 @@ const addEmployee = () => {
                     console.log(err);
                 }
                 console.log('Added new Employee');
+                start();
             });
     })
 };
+const employee = [];
+    const sql = `SELECT first_name FROM employees`
+    db.query(sql, (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        res.forEach(({first_name}) => {
+            employee.push(first_name)
+        })
+    });
+
+const role = [];
+    const sql2 = `SELECT title FROM roles`
+    db.query(sql2, (err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        res.forEach(({title}) => {
+            role.push(title)
+        })
+    });
 
 const updateEmployeeRole = () => {
     inquirer.prompt([{
             name: 'updateEmployee',
             message: "Which employee's role would you like to update?",
             type: 'list',
-            choices: ['Millie Torres', 'Justin Garcia', 'Emmanuel Allen', 'Preston Jones', 'Henry Lee', 'Brody Moore', 'Gianna Monroe']
+            choices: employee
         },
         {
             name: 'updateRole',
             message: "Which role do you want to assign the selected employee?",
             type: 'list',
-            choices: ['Salesperson', 'Human Resources Generalist', 'Human Resources Analyst', 'Senior Accountant', 'Financial Analyst', 'Administrative Assistant', 'Executive Assistant']
+            choices: role
         }
     ]).then((res) => {
-        db.query(`SELECT id FROM roles WHERE title = ?`, res.role, (err, res) => {
+        db.query(`SELECT id FROM roles WHERE title = ?`, res.updateRole, (err, res) => {
             if (err) {
                 console.log(err);
             }
-            db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [res[0].id, res.employee], (err, res) => {
+            db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [res[0].id, res.updateEmployee], (err, res) => {
                 if (err) {
                     console.log(err);
                 }
                 console.log("Updated Employee's Role");
+                console.table(res);
+                start();
             })
         })
     })
@@ -124,6 +153,7 @@ const viewAllRoles = () => {
         }
         console.log('View all Roles');
         console.table(res);
+        start();
     })
 }
 
@@ -153,6 +183,7 @@ const addRole = () => {
             }
             console.log('Added new Role')
             console.table(res);
+            start();
         });
 })
 };
@@ -164,6 +195,7 @@ const viewAllDepartments = () => {
         }
         console.log('View all Departments');
         console.table(res);
+        start();
     })
 }
 
@@ -183,7 +215,8 @@ const addDepartment = () => {
             }
             console.log('Added new Department')
             console.table(res);
+            start();
         });
 })
 }
-start()
+restart();
