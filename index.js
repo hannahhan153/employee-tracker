@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const consoleTable = require('console.table');
+const sequelize = require("mysql2");
 const db = require('./db/connection');
 
 function restart() {
@@ -128,12 +129,12 @@ const updateEmployeeRole = () => {
             type: 'list',
             choices: role
         }
-    ]).then((res) => {
-        db.query(`SELECT id FROM roles WHERE title = ?`, res.updateRole, (err, res) => {
+    ]).then((answers) => {
+        db.query(`SELECT id FROM roles WHERE title = ?`, answers.updateRole, (err, res) => {
             if (err) {
                 console.log(err);
             }
-            db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [res[0].id, res.updateEmployee], (err, res) => {
+        db.query(`UPDATE employees SET role_id = ? WHERE first_name = ?`, [res[0].id, answers.updateEmployee], (err, res) => {
                 if (err) {
                     console.log(err);
                 }
